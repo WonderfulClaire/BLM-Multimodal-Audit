@@ -87,6 +87,10 @@ def offline_binpack(
 
     # 1) shuffle
     samples = list(samples)
+    if cfg.bin_size <= 0 or any(
+        s.token_count <= 0 or s.token_count > cfg.bin_size for s in samples
+    ):
+        raise ValueError("Image token count must fit positive bin budget")
     rng.shuffle(samples)
 
     # 2) 按 token 数降序
@@ -152,6 +156,8 @@ class OnlineBinPacker:
 
     def add(self, sample: ImageSample) -> None:
         """加入一张图。若放不下当前 bin 就把当前 bin 提交，再开新 bin。"""
+        if sample.token_count <= 0 or sample.token_count > self.cfg.bin_size:
+            raise ValueError("Image token count must fit positive bin budget")
         if self.current_used + sample.token_count <= self.cfg.bin_size:
             self.current_bin.append(sample)
             self.current_used += sample.token_count

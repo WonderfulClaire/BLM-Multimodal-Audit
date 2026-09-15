@@ -54,10 +54,21 @@ def video_binpack(
         List[bins]，每个 bin 是一个 VideoSample 列表。
         单 bin 内所有视频的 num_frames 之和 <= bin_size。
     """
+    if cfg.bin_size <= 0 or cfg.max_frames_per_video <= 0:
+        raise ValueError("Invalid video budget")
+    if any(
+        s.num_frames <= 0
+        or s.num_frames > len(s.frame_paths)
+        or min(s.num_frames, cfg.max_frames_per_video) > cfg.bin_size
+        for s in samples
+    ):
+        raise ValueError("Video frames must fit bin budget and available paths")
     # 1) 截断到 max_frames_per_video
     samples = [
         VideoSample(
-            s.video_id, s.frame_paths, min(s.num_frames, cfg.max_frames_per_video)
+            s.video_id,
+            s.frame_paths[: min(s.num_frames, cfg.max_frames_per_video)],
+            min(s.num_frames, cfg.max_frames_per_video),
         )
         for s in samples
     ]
