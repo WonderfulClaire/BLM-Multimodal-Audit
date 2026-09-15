@@ -56,3 +56,17 @@ def test_numeric_flywheel_mode_rejects_wrong_teacher_labels(tmp_path):
     (inputs/'trajectories.jsonl').write_text(''.join(json.dumps(r)+'\n' for r in traces))
     prepare(inputs,tmp_path/'reward-only',validator_name='measured')
     assert (tmp_path/'reward-only/candidates.jsonl').read_text() == ''
+
+def test_prepare_preserves_provided_source_groups(tmp_path):
+    import json
+    from scripts.run_agent_flywheel import prepare
+    from data_flywheel.round import run_round
+    inputs=tmp_path/'input';inputs.mkdir()
+    base={'id':'a','group_id':'same-source','split':'train','symptom':'x','case':normal_case(),'ground_truth':['C1']}
+    holdout={**base,'id':'b','split':'test'}
+    holdout['case']={'sections':{'resource':['different content']}}
+    for name,rows in [('train',[base]),('eval12',[holdout]),('compound_train',[]),('trajectories',[])]:
+        (inputs/(name+'.jsonl')).write_text(''.join(json.dumps(r)+'\n' for r in rows))
+    config=prepare(inputs,tmp_path/'prepared',validator_name='measured')
+    with pytest.raises(ValueError,match='overlaps held-out'):
+        run_round(config,tmp_path/'release')

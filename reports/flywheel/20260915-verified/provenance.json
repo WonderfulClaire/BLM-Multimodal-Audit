@@ -9,5 +9,7 @@
     "compound_train.jsonl": "b975c6bed5ef84d060c496feaf99a5a72df073d3d65f2ecef6e3ea20714b28fa",
     "trajectories.jsonl": "5832ce2e52738d108c8a777cdc15f76be672a2a2316ae8967490996064dfc717",
     "eval12.jsonl": "b769963f13c1e444c3da3f402e3ed9b20e8ee2f559441b534d5590900f71b79e"
-  }
+  },
+  "group_preservation_fix_sha256": "4cd62d7e61e2d3baa3c257322272c7b20c954d4e854168a93541cd9565280519",
+  "rerun_report_sha256": "d8056449a2b3acb3ee968c18a804c80b426c85aa542ab40bff7ea9a0dc82f3de"
 }

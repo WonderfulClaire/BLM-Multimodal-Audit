@@ -64,7 +64,7 @@ def prepare(inputs, output, validator_name="template"):
         return {
             **row,
             "task_type": "agent",
-            "group_id": row["id"],
+            "group_id": row.get("group_id", row["id"]),
             "prompt": row["symptom"],
             "case_sha256": case_digest(row["case"]),
         }
@@ -85,7 +85,7 @@ def prepare(inputs, output, validator_name="template"):
             {
                 "id": row["id"],
                 "source_id": row["id"],
-                "group_id": row["id"],
+                "group_id": row.get("group_id", row["id"]),
                 "split": "train",
                 "error_type": "wrong_reason",
                 "severity": 1 - route["mean_correctness"],
