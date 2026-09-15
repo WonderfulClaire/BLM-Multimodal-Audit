@@ -1,0 +1,4 @@
+{
+  "visual_pretrain/dist_sync.py": "5c1e8e96f0d85666d86b3be1ce9c25f9ac5668d1fc1db15fa78a57b1ca09cae6",
+  "scripts/distributed_negatives_lab.py": "86ca39cede8b4948a49d335319213357b025fefae86befbe202824c88d1f0ad7"
+}

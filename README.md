@@ -2,6 +2,8 @@
 
 面向图像与视频审核的多模态训练项目：从细粒度数据生产、视觉表征学习，到结构化审核输出的 GRPO 后训练与错例回流。
 
+新增[四卡NCCL实验与反向通信优化](reports/distributed/20260915/REPORT.md)：真实DDP参数梯度对齐集中式目标，覆盖不等长batch与空rank；保留ReduceScatter、AllReduce及原生AllGather逐次计时。通信轮数、微基准耗时和业务收益分别报告。
+
 ## 核心模块
 
 | 目标 | 实现 | 验证 |

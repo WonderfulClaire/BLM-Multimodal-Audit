@@ -1,0 +1,229 @@
+{
+  "world_size": 4,
+  "backend": "nccl",
+  "torch": "2.6.0+cu124",
+  "device": "NVIDIA GeForce RTX 4090",
+  "all_empty_rejected": true,
+  "correctness": [
+    {
+      "mode": "bidir",
+      "sizes": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "global_mean_loss": 2.3854840544522435,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 1.1102230246251565e-16,
+        "text.weight": 5.551115123125783e-17,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "native",
+      "sizes": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "global_mean_loss": 2.3854840544522435,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 1.1102230246251565e-16,
+        "text.weight": 5.551115123125783e-17,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "bidir",
+      "sizes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "global_mean_loss": 1.8855881510643062,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 8.326672684688674e-17,
+        "text.weight": 5.551115123125783e-17,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "native",
+      "sizes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "global_mean_loss": 1.8855881510643062,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 5.551115123125783e-17,
+        "text.weight": 5.551115123125783e-17,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "bidir",
+      "sizes": [
+        0,
+        0,
+        0,
+        4
+      ],
+      "global_mean_loss": 1.421935897170668,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 0.0,
+        "text.weight": 0.0,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "native",
+      "sizes": [
+        0,
+        0,
+        0,
+        4
+      ],
+      "global_mean_loss": 1.421935897170668,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 0.0,
+        "text.weight": 0.0,
+        "objective.logit_scale": 0.0
+      }
+    }
+  ],
+  "timings": [
+    {
+      "mode": "bidir",
+      "batch_per_rank": 32,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 20,
+      "max_rank_median_ms": 0.6737858057022095,
+      "max_rank_p95_ms": 0.7707327604293823,
+      "samples_ms": [
+        0.7707327604293823,
+        0.7284954190254211,
+        1.5487521886825562,
+        0.7697790861129761,
+        0.7252097129821777,
+        0.6959438323974609,
+        0.6827265024185181,
+        0.6553828716278076,
+        0.6732791662216187,
+        0.660724937915802,
+        0.660918653011322,
+        0.6756633520126343,
+        0.6501302123069763,
+        0.655829906463623,
+        0.6550028920173645,
+        0.6903931498527527,
+        0.6626099348068237,
+        0.6673187017440796,
+        0.6742924451828003,
+        0.6626918911933899
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    },
+    {
+      "mode": "native",
+      "batch_per_rank": 32,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 20,
+      "max_rank_median_ms": 0.8051618933677673,
+      "max_rank_p95_ms": 0.8219107985496521,
+      "samples_ms": [
+        0.8280351758003235,
+        0.8017867803573608,
+        0.8056536316871643,
+        0.8093267679214478,
+        0.8025318384170532,
+        0.7833093404769897,
+        0.7999613881111145,
+        0.8093193173408508,
+        0.8139684796333313,
+        0.8145347237586975,
+        0.8122771978378296,
+        0.8085146546363831,
+        0.8046701550483704,
+        0.7996708154678345,
+        0.8219107985496521,
+        0.8101090788841248,
+        0.7979869842529297,
+        0.7965266704559326,
+        0.7903724908828735,
+        0.7835403084754944
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    },
+    {
+      "mode": "bidir",
+      "batch_per_rank": 512,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 20,
+      "max_rank_median_ms": 0.964675098657608,
+      "max_rank_p95_ms": 1.0274126529693604,
+      "samples_ms": [
+        1.0274126529693604,
+        0.9709075093269348,
+        1.9942595958709717,
+        1.0156407356262207,
+        0.9751394391059875,
+        0.9549185633659363,
+        0.9644776582717896,
+        0.9570717811584473,
+        0.9564235806465149,
+        0.9475797414779663,
+        0.9535849094390869,
+        0.9387210011482239,
+        0.9637624025344849,
+        0.9752362966537476,
+        0.9639263153076172,
+        0.9716227650642395,
+        0.9509921073913574,
+        0.9648725390434265,
+        0.9665489196777344,
+        0.9688064455986023
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    },
+    {
+      "mode": "native",
+      "batch_per_rank": 512,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 20,
+      "max_rank_median_ms": 0.8859075605869293,
+      "max_rank_p95_ms": 0.9093284606933594,
+      "samples_ms": [
+        0.9093284606933594,
+        0.9162351489067078,
+        0.8851513266563416,
+        0.905357301235199,
+        0.8862689137458801,
+        0.8978918194770813,
+        0.8843839168548584,
+        0.8763670921325684,
+        0.8758604526519775,
+        0.8855462074279785,
+        0.8745715022087097,
+        0.8933022618293762,
+        0.8872300386428833,
+        0.8841454982757568,
+        0.8735582232475281,
+        0.8826181292533875,
+        0.8918642997741699,
+        0.8881613612174988,
+        0.8801966905593872,
+        0.8973702788352966
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    }
+  ]
+}

@@ -28,7 +28,9 @@ def worker(rank, world, rendezvous):
     # Candidate-side and anchor-side gradients must match a centralized objective.
     images = full.clone().requires_grad_()
     texts = (full.flip(1) + 0.2).clone().requires_grad_()
-    baseline = CLIPContrastiveLoss(temperature=1, learnable_temp=False)(images, texts)
+    baseline = CLIPContrastiveLoss(temperature=1, learnable_temp=False)(
+        images, texts, images, texts, rank=0, batch_sizes=[len(images)]
+    )
     baseline.backward()
     li = full[offset : offset + sizes[rank]].clone().requires_grad_()
     lt = (full.flip(1) + 0.2)[offset : offset + sizes[rank]].clone().requires_grad_()
@@ -43,6 +45,9 @@ def worker(rank, world, rendezvous):
     torch.testing.assert_close(
         lt.grad / world, texts.grad[offset : offset + sizes[rank]], atol=1e-6, rtol=1e-5
     )
+    # Test real DDP parameter averaging, not just embedding gradient scaling.
+    from scripts.distributed_negatives_lab import correctness
+    correctness(torch.device("cpu"), world, rank)
     dist.destroy_process_group()
 
 

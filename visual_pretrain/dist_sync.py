@@ -57,7 +57,7 @@ class BidirAllGather:
 
 class _BidirGather(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, x, sizes):
+    def forward(ctx, x, sizes, backward_mode):
         world = dist.get_world_size()
         rank = dist.get_rank()
         maximum = max(sizes)
@@ -91,6 +91,9 @@ class _BidirGather(torch.autograd.Function):
         ctx.sizes = sizes
         ctx.rank = rank
         ctx.maximum = maximum
+        ctx.reduce_scatter = backward_mode == "reduce_scatter" or (
+            backward_mode == "auto" and dist.get_backend() == "nccl"
+        )
         return torch.cat([b[:n] for b, n in zip(blocks, sizes)], 0)
 
     @staticmethod
@@ -99,17 +102,27 @@ class _BidirGather(torch.autograd.Function):
         padded = torch.stack(
             [F.pad(x, (0, 0, 0, ctx.maximum - x.shape[0])) for x in chunks]
         ).contiguous()
+        if ctx.reduce_scatter:
+            # AllGather's adjoint is SUM ReduceScatter: each feature owner needs
+            # only its block, with contributions summed over every consumer rank.
+            local = torch.empty_like(padded[ctx.rank])
+            dist.reduce_scatter_tensor(local, padded.flatten(0, 1))
+            return local[: ctx.sizes[ctx.rank]], None, None
         dist.all_reduce(padded)
-        return padded[ctx.rank, : ctx.sizes[ctx.rank]], None
+        return padded[ctx.rank, : ctx.sizes[ctx.rank]], None, None
 
 
-def gather_features(x):
+def gather_features(x, backward_mode="auto"):
+    if backward_mode not in ("auto", "all_reduce", "reduce_scatter"):
+        raise ValueError("Unknown backward communication mode")
     if not dist.is_initialized() or dist.get_world_size() == 1:
         return x, [x.shape[0]]
     sizes = sync_dynamic_batch_size(x.shape[0], device=x.device)
     if max(sizes) == 0:
         raise ValueError("Global batch is empty")
-    return _BidirGather.apply(x, sizes), sizes
+    if backward_mode == "reduce_scatter" and dist.get_backend() != "nccl":
+        raise ValueError("Explicit ReduceScatter mode requires the tested NCCL backend")
+    return _BidirGather.apply(x, sizes, backward_mode), sizes
 
 
 class CLIPContrastiveLoss(nn.Module):

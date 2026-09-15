@@ -1,0 +1,161 @@
+{
+  "world_size": 4,
+  "backend": "gloo",
+  "torch": "2.14.0",
+  "device": "CPU",
+  "all_empty_rejected": true,
+  "correctness": [
+    {
+      "mode": "bidir",
+      "sizes": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "global_mean_loss": 2.4672183843137123,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 5.551115123125783e-17,
+        "text.weight": 1.1102230246251565e-16,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "native",
+      "sizes": [
+        2,
+        2,
+        2,
+        2
+      ],
+      "global_mean_loss": 2.4672183843137123,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 6.245004513516506e-17,
+        "text.weight": 1.1102230246251565e-16,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "bidir",
+      "sizes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "global_mean_loss": 2.023601466134604,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 1.1102230246251565e-16,
+        "text.weight": 1.6653345369377348e-16,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "native",
+      "sizes": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "global_mean_loss": 2.023601466134604,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 1.1102230246251565e-16,
+        "text.weight": 1.1102230246251565e-16,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "bidir",
+      "sizes": [
+        0,
+        0,
+        0,
+        4
+      ],
+      "global_mean_loss": 1.6123982028891573,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 0.0,
+        "text.weight": 0.0,
+        "objective.logit_scale": 0.0
+      }
+    },
+    {
+      "mode": "native",
+      "sizes": [
+        0,
+        0,
+        0,
+        4
+      ],
+      "global_mean_loss": 1.6123982028891573,
+      "max_gradient_error_by_parameter": {
+        "image.weight": 0.0,
+        "text.weight": 0.0,
+        "objective.logit_scale": 0.0
+      }
+    }
+  ],
+  "timings": [
+    {
+      "mode": "bidir",
+      "batch_per_rank": 32,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 3,
+      "max_rank_median_ms": 2.585292100906372,
+      "max_rank_p95_ms": 2.585292100906372,
+      "samples_ms": [
+        2.503541946411133,
+        2.585292100906372,
+        2.8036251068115234
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    },
+    {
+      "mode": "native",
+      "batch_per_rank": 32,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 3,
+      "max_rank_median_ms": 2.776540994644165,
+      "max_rank_p95_ms": 2.776540994644165,
+      "samples_ms": [
+        2.60604190826416,
+        2.814457893371582,
+        2.776540994644165
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    },
+    {
+      "mode": "bidir",
+      "batch_per_rank": 512,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 3,
+      "max_rank_median_ms": 15.802457809448242,
+      "max_rank_p95_ms": 15.802457809448242,
+      "samples_ms": [
+        16.00237464904785,
+        15.802457809448242,
+        14.934540748596191
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    },
+    {
+      "mode": "native",
+      "batch_per_rank": 512,
+      "dimension": 512,
+      "dtype": "float32",
+      "repeats": 3,
+      "max_rank_median_ms": 15.608416557312012,
+      "max_rank_p95_ms": 15.608416557312012,
+      "samples_ms": [
+        16.475584030151367,
+        15.608416557312012,
+        14.041458129882812
+      ],
+      "scope": "feature gather plus scalar objective backward, including length exchange; not full CLIP training"
+    }
+  ]
+}
