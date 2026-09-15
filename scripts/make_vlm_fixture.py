@@ -15,12 +15,16 @@ POLICY = ('测试规则：只有红色方块标为风险，红色圆形不算风
           '否则risk_category为正常、risk_level为低危。reason说明图片中的方块颜色和判定依据。')
 
 
-def generate(root):
+def generate(root, groups=4, layout_offset=0):
+    if groups < 1 or layout_offset < 0:
+        raise ValueError('Need positive group count and nonnegative layout offset')
     root = Path(root);root.mkdir(parents=True, exist_ok=False)
     hashes = set();manifest = {}
-    for split, start in [('train',0),('dev',10),('test',20)]:
+    stride = max(10, groups)
+    for index, split in enumerate(('train', 'dev', 'test')):
+        start = layout_offset + index * stride
         rows=[]
-        for layout in range(start,start+4):
+        for layout in range(start,start+groups):
             for color,cn in [('red','红色'),('blue','蓝色'),('green','绿色')]:
                 image=Image.new('RGB',(224,168),(245+layout%10,)*3)
                 draw=ImageDraw.Draw(image)
@@ -44,9 +48,12 @@ def generate(root):
                              'image_sha256':hashlib.sha256((root/name).read_bytes()).hexdigest()})
         payload=''.join(json.dumps(r,ensure_ascii=False)+'\n' for r in rows)
         (root/(split+'.jsonl')).write_text(payload)
-        manifest[split]={'samples':len(rows),'groups':4,'sha256':hashlib.sha256(payload.encode()).hexdigest()}
+        manifest[split]={'samples':len(rows),'groups':groups,'sha256':hashlib.sha256(payload.encode()).hexdigest()}
     (root/'manifest.json').write_text(json.dumps(manifest,indent=2));return manifest
 
 if __name__=='__main__':
     p=argparse.ArgumentParser();p.add_argument('output',type=Path)
-    print(json.dumps(generate(p.parse_args().output),indent=2))
+    p.add_argument('--groups', type=int, default=4)
+    p.add_argument('--layout-offset', type=int, default=0)
+    a=p.parse_args()
+    print(json.dumps(generate(a.output, a.groups, a.layout_offset),indent=2))

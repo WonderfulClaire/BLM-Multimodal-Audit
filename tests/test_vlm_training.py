@@ -1,7 +1,21 @@
 import json
 import torch
+import pytest
 from torch import nn
 from types import SimpleNamespace
+
+
+def test_merged_metadata_cleanup_requires_unloaded_adapter():
+    from grpo_post_training.vlm import clear_merged_adapter_metadata
+    base = nn.Linear(2, 2)
+    base.peft_config = {'default': 'stale'}
+    before = base.weight.detach().clone()
+    assert clear_merged_adapter_metadata(base) is base
+    assert not hasattr(base, 'peft_config')
+    torch.testing.assert_close(base.weight, before)
+    base.register_parameter('lora_A', nn.Parameter(torch.zeros(2, 2)))
+    with pytest.raises(ValueError, match='not completely merged'):
+        clear_merged_adapter_metadata(base)
 
 
 def test_strict_audit_rejects_shortcuts_and_wrong_types():

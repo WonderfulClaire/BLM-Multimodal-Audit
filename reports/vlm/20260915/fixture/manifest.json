@@ -1,0 +1,17 @@
+{
+  "train": {
+    "samples": 12,
+    "groups": 4,
+    "sha256": "37ba68dea37cffcff865ca20b334be856ef52645b2a7f08113f8751383113e39"
+  },
+  "dev": {
+    "samples": 12,
+    "groups": 4,
+    "sha256": "797a0d3f0579361de2bc559b4b351ad33270f9d615e0858f17e11593e582080a"
+  },
+  "test": {
+    "samples": 12,
+    "groups": 4,
+    "sha256": "db6a9c248d68afd3858775158d7ec8b23148632869748bd434c9c6beb3221c07"
+  }
+}

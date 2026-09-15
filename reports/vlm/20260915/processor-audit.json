@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "id": "1892b98c4fe304c4e2f7",
+      "image_tokens": 48,
+      "grid": [
+        [
+          1,
+          12,
+          16
+        ]
+      ],
+      "pixel_shape": [
+        192,
+        1176
+      ]
+    },
+    {
+      "id": "b1b9b94520396d672833",
+      "image_tokens": 48,
+      "grid": [
+        [
+          1,
+          12,
+          16
+        ]
+      ],
+      "pixel_shape": [
+        192,
+        1176
+      ]
+    },
+    {
+      "id": "4e4a08d0f8d1059734fe",
+      "image_tokens": 48,
+      "grid": [
+        [
+          1,
+          12,
+          16
+        ]
+      ],
+      "pixel_shape": [
+        192,
+        1176
+      ]
+    }
+  ],
+  "counterfactual_same_text_tokens": true,
+  "counterfactual_different_pixels": true
+}

@@ -1,0 +1,92 @@
+[
+  {
+    "id": "1892b98c4fe304c4e2f7",
+    "min_pixels": 3136,
+    "grid": [
+      [
+        1,
+        12,
+        16
+      ]
+    ],
+    "text": "```json\n{\n  \"square_color\": \"red\",\n  \"circle_color\": \"red\"\n}\n```",
+    "expected_square": "红色",
+    "expected_circle": "red",
+    "scope": "training-only perception diagnostic, not held-out performance"
+  },
+  {
+    "id": "b1b9b94520396d672833",
+    "min_pixels": 3136,
+    "grid": [
+      [
+        1,
+        12,
+        16
+      ]
+    ],
+    "text": "```json\n{\n  \"square_color\": \"blue\",\n  \"circle_color\": \"red\"\n}\n```",
+    "expected_square": "蓝色",
+    "expected_circle": "red",
+    "scope": "training-only perception diagnostic, not held-out performance"
+  },
+  {
+    "id": "4e4a08d0f8d1059734fe",
+    "min_pixels": 3136,
+    "grid": [
+      [
+        1,
+        12,
+        16
+      ]
+    ],
+    "text": "```json\n{\n  \"square_color\": \"green\",\n  \"circle_color\": \"red\"\n}\n```",
+    "expected_square": "绿色",
+    "expected_circle": "red",
+    "scope": "training-only perception diagnostic, not held-out performance"
+  },
+  {
+    "id": "1892b98c4fe304c4e2f7",
+    "min_pixels": 200704,
+    "grid": [
+      [
+        1,
+        28,
+        38
+      ]
+    ],
+    "text": "```json\n{\n  \"square_color\": \"red\",\n  \"circle_color\": \"red\"\n}\n```",
+    "expected_square": "红色",
+    "expected_circle": "red",
+    "scope": "training-only perception diagnostic, not held-out performance"
+  },
+  {
+    "id": "b1b9b94520396d672833",
+    "min_pixels": 200704,
+    "grid": [
+      [
+        1,
+        28,
+        38
+      ]
+    ],
+    "text": "```json\n{\n  \"square_color\": \"blue\",\n  \"circle_color\": \"red\"\n}\n```",
+    "expected_square": "蓝色",
+    "expected_circle": "red",
+    "scope": "training-only perception diagnostic, not held-out performance"
+  },
+  {
+    "id": "4e4a08d0f8d1059734fe",
+    "min_pixels": 200704,
+    "grid": [
+      [
+        1,
+        28,
+        38
+      ]
+    ],
+    "text": "```json\n{\n  \"square_color\": \"green\",\n  \"circle_color\": \"red\"\n}\n```",
+    "expected_square": "绿色",
+    "expected_circle": "red",
+    "scope": "training-only perception diagnostic, not held-out performance"
+  }
+]

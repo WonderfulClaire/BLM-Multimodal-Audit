@@ -1,0 +1,13 @@
+{
+  "samples": 24,
+  "source_groups": 8,
+  "strict_joint_accuracy": 1.0,
+  "content_category_accuracy": 1.0,
+  "content_joint_accuracy": 1.0,
+  "content_all_correct_group_fraction": 1.0,
+  "content_joint_by_category": {
+    "风险": 1.0,
+    "正常": 1.0
+  },
+  "scope": "Post-hoc diagnostic permits one JSON fence; training reward and strict acceptance unchanged; reason semantics not evaluated"
+}

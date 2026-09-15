@@ -63,6 +63,15 @@ def messages_for(row):
             {'role': 'user', 'content': [{'type': 'image'}, {'type': 'text', 'text': row['prompt']}]}]
 
 
+def clear_merged_adapter_metadata(base):
+    """Remove PEFT's stale registry only after verifying adapters were unloaded."""
+    if any('lora_' in name for name, _ in base.named_parameters()):
+        raise ValueError('SFT adapter was not completely merged and unloaded')
+    if hasattr(base, 'peft_config'):
+        delattr(base, 'peft_config')
+    return base
+
+
 def response_log_probs(model, inputs, actions):
     if actions.ndim != 2 or actions.shape[0] != 1 or actions.shape[1] < 1:
         raise ValueError('Need one nonempty generated response')
@@ -131,7 +140,7 @@ def main():
     base = Qwen2_5_VLForConditionalGeneration.from_pretrained(a.model, torch_dtype=torch.bfloat16,
                                                            attn_implementation='sdpa').to(a.device)
     if a.sft_adapter:
-        base = PeftModel.from_pretrained(base, a.sft_adapter).merge_and_unload()
+        base = clear_merged_adapter_metadata(PeftModel.from_pretrained(base, a.sft_adapter).merge_and_unload())
     if a.mode == 'eval':
         model = PeftModel.from_pretrained(base, a.adapter) if a.adapter else base
     else:

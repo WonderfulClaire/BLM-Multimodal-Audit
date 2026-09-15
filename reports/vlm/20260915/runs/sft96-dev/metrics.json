@@ -1,0 +1,24 @@
+{
+  "format_valid": 1.0,
+  "category_correct": 1.0,
+  "level_correct": 1.0,
+  "joint_correct": 1.0,
+  "by_category": {
+    "\u98ce\u9669": {
+      "samples": 4,
+      "category_accuracy": 1.0,
+      "joint_accuracy": 1.0
+    },
+    "\u6b63\u5e38": {
+      "samples": 8,
+      "category_accuracy": 1.0,
+      "joint_accuracy": 1.0
+    }
+  },
+  "all_correct_group_fraction": 1.0,
+  "samples": 12,
+  "source_groups": 4,
+  "splits": [
+    "dev"
+  ]
+}

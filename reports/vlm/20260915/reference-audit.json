@@ -1,0 +1,8 @@
+{
+  "merged_lora_parameter_count": 0,
+  "stale_peft_metadata_removed": true,
+  "initial_policy_vs_merged_max_logprob_error": 0.0,
+  "disabled_reference_vs_merged_max_logprob_error": 0.0,
+  "reference_contains_sft": true,
+  "response_tokens": 31
+}

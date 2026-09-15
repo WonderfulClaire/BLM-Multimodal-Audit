@@ -1,0 +1,2 @@
+# Optional local monitoring; not required by the training or CPU test suite.
+tensorboard==2.21.0

@@ -60,7 +60,9 @@ python -m torch.distributed.run --master_addr=127.0.0.1 --master_port=29618 --np
 
 ## 实验范围
 
-当前可运行训练器使用从头初始化的小型双塔与结构化生成模型。GRPO 的三个输出 token 分别表示类别、等级、理由，适合核验采样、奖励、梯度和存盘链路；完整自然语言多模态模型训练仍需接入真实权重与训练后端。
+训练器同时提供紧凑双塔/三语义token测试入口，以及真实Qwen2.5-VL图片条件生成、LoRA SFT/GRPO入口。真实VLM已完成GPU训练和重载评测；[实验记录](reports/vlm/20260915/REPORT.md)保留24步SFT及GRPO全部判正常的失败、96步训练覆盖对照和新布局确认。简单合成规则的改善不代表真实业务审核效果。
+
+[真实VLM运行说明](docs/VLM_TRAINING.md) · [TensorBoard界面、指标与调参带读](docs/TRAINING_DASHBOARD.md)。监控可选依赖见requirements-monitoring.txt；scripts/export_tensorboard.py将显式列出的JSONL与评测点导入TensorBoard，不补造未记录的指标。
 
 二维视觉 RoPE 已实现；完整多模态语言模型的时间/高度/宽度 MRoPE 不包含在该紧凑模型中。视频抽帧采用确定性启发式，不能保证短事件召回。视觉训练入口逐图编码动态分辨率；全局、区域和难负例三项损失已接入 `torchrun` 训练入口，并与集中式模型梯度核对；当前采用完整 manifest 批次，每个 rank 至少一张图，尚无大规模多机数据流与视频联合训练验证。
 

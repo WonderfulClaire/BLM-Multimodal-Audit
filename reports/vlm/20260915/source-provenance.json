@@ -1,0 +1,8 @@
+{
+  "source_sha256": {
+    "grpo_post_training/vlm.py": "98086a76095c8cbd12087949840a023eddfa53bd62f5ea761bac087f8fea2c78",
+    "scripts/make_vlm_fixture.py": "ef0ed14d03d0f66925c6e5080c09e6297b523954836640b58a92a0d85ef2360f",
+    "scripts/analyze_vlm_predictions.py": "bd9eef78424a980839f5b85df539de768a0c3b3912e592f0ad25a175c22bc55e"
+  },
+  "note": "Current source includes merged-adapter metadata cleanup verified to preserve response probabilities. Original round used the same objective and processor before that metadata-only cleanup. Public configs normalize the model directory; raw snapshots retained locally. Figures are synthetic."
+}

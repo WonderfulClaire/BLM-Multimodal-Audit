@@ -1,0 +1,32 @@
+{
+  "mode": "eval",
+  "model": "models/Qwen2.5-VL-3B-Instruct",
+  "sft_adapter": "runs/sft/adapter",
+  "adapter": null,
+  "seed": 42,
+  "steps": 12,
+  "lr": 1e-05,
+  "group_size": 4,
+  "max_tokens": 192,
+  "beta": 0.01,
+  "torch": "2.6.0+cu124",
+  "manifest_sha256": "db6a9c248d68afd3858775158d7ec8b23148632869748bd434c9c6beb3221c07",
+  "image_sha256": {
+    "0711c327f49a53cae5d8": "373ea714c23a50b2808c9cf848b6e1f9b6ae29046808659a5ae442605f585886",
+    "8d1a96d1929544649607": "4ca36df635ecdcfef141f2e4da749aa51c73c8b26020092c681bece889bb297b",
+    "74e6494251c69be264b3": "de52c2a574877781ed6dba61d0d599bec9b09d2258858612ea90c09905096545",
+    "ccb1ff6baec159fdf8be": "421b01e3893b23c5e08b73ea5d2ac1aaf09e91e411153628a649f4657d99840a",
+    "d2fba3abfc699b5cd2ae": "7b12504eee4b97690d65fe4c702e0c2385c12e7f9ac25e023654aae8baabfa74",
+    "aecb97b60f7738acc8c2": "27d220c8394775b023dd755ee5eb0420cd75794780414c1d969389389b380731",
+    "f24748e9d755ab88238d": "83b39580949b5f1c18615636b4d773f6c9f42daccfbf3b95b46082325e1990e0",
+    "c70c0fbc245e5f7ca3c0": "cdb7a4492da6864ffdff2127d40214a2d310de3016f5c8996864b76fc88c236c",
+    "bc43d12055640f026a92": "272f668f78d1053433fc69c37c9782cf0b416263cf999056f06906e8aa007f5a",
+    "f7db001e0126ebd869dc": "be3a470f03c64dd3507523f974e751a8a497666be6056b8da0659355f04d28eb",
+    "03d11bccdf5da8d9af08": "481423d95ea55b992ed577fddd1584dd1b36e6d655ac28bedbc23bb8d4cce650",
+    "6ab303ecab4e58d64ed9": "62ae26a9f156dfa64623b95bc1286007226398a4a0ba245e2bdb3292713bf087"
+  },
+  "trainable_parameters": 0,
+  "reference": "frozen base including merged SFT; policy adapter disabled",
+  "reward": "binary exact category and level, strict JSON; reason not semantically graded",
+  "scope": "image-conditioned pretrained VLM; evaluation validity depends on supplied data"
+}
