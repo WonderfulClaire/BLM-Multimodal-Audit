@@ -1,0 +1,63 @@
+{
+  "seed": 42,
+  "steps": 6,
+  "group_size": 4,
+  "parameter_delta_l2": 0.2599261701107025,
+  "history": [
+    {
+      "step": 0,
+      "reward_mean": 0.7124999761581421,
+      "reward_std": 0.125,
+      "loss": -0.012491384521126747,
+      "policy_loss": -0.012505422346293926,
+      "kl": 0.00014038245717529207,
+      "group_adv_std": 0.125
+    },
+    {
+      "step": 1,
+      "reward_mean": 0.8999999761581421,
+      "reward_std": 0.0,
+      "loss": 9.386716556036845e-05,
+      "policy_loss": 0.0,
+      "kl": 0.0009386716410517693,
+      "group_adv_std": 9.999999747378752e-05
+    },
+    {
+      "step": 2,
+      "reward_mean": 0.8374999761581421,
+      "reward_std": 0.125,
+      "loss": -0.0013377772411331534,
+      "policy_loss": -0.0015019873389974236,
+      "kl": 0.0016421013278886676,
+      "group_adv_std": 0.125
+    },
+    {
+      "step": 3,
+      "reward_mean": 0.7124999761581421,
+      "reward_std": 0.125,
+      "loss": -0.002361629158258438,
+      "policy_loss": -0.002570708515122533,
+      "kl": 0.0020907928701490164,
+      "group_adv_std": 0.125
+    },
+    {
+      "step": 4,
+      "reward_mean": 0.8374999761581421,
+      "reward_std": 0.125,
+      "loss": -0.00223535462282598,
+      "policy_loss": -0.0025314788799732924,
+      "kl": 0.0029612418729811907,
+      "group_adv_std": 0.125
+    },
+    {
+      "step": 5,
+      "reward_mean": 0.8999999761581421,
+      "reward_std": 0.0,
+      "loss": 0.000384108250727877,
+      "policy_loss": 0.0,
+      "kl": 0.0038410823326557875,
+      "group_adv_std": 9.999999747378752e-05
+    }
+  ],
+  "scope": "compact structured-output CPU training; not business benchmark"
+}

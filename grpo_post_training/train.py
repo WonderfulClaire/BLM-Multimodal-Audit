@@ -198,7 +198,8 @@ def run_training(manifest, output, steps=3, group_size=4, seed=42, device="cpu")
         "group_size": group_size,
         "parameter_delta_l2": float((final - initial).norm()),
         "history": history,
-        "scope": "compact structured-output CPU training; not business benchmark",
+        "device": str(device),
+        "scope": "compact structured-output training; not business benchmark",
     }
     torch.save(
         {
