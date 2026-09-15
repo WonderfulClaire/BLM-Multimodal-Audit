@@ -21,3 +21,10 @@ def test_review_gate_and_test_split_exclusion():
     assert not filter_candidates([c], [])[0]
     assert not filter_candidates([c], [d], {"x"})[0]
     assert len(filter_candidates([c, c], [d])[0]) == 1
+
+def test_efficiency_routing_requires_independent_cost():
+    from data_flywheel.rl_feedback import route_group
+    assert route_group([.7, .9], [1, 1])['route'] == 'audit_reward_only_variance'
+    assert route_group([.7, .9], [1, 1], efficiency_costs=[7, 7])['route'] == 'audit_reward_only_variance'
+    assert route_group([.7, .9], [1, 1], efficiency_costs=[8, 6])['route'] == 'efficiency_rl'
+    assert route_group([.7, .9], [1, 1], efficiency_costs=[6, 8])['route'] == 'audit_reward_efficiency_conflict'

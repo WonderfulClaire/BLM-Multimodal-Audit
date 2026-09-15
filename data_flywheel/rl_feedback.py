@@ -4,7 +4,32 @@ import math
 from statistics import pstdev
 
 
-def route_group(rewards, correctness_scores, epsilon=1e-6):
+
+def efficiency_route(rewards, costs, epsilon):
+    if max(rewards) - min(rewards) <= epsilon:
+        return "mastered_replay"
+    if costs is None or max(costs) - min(costs) <= epsilon:
+        return "audit_reward_only_variance"
+    conflict = any(
+        abs(costs[i] - costs[j]) > epsilon and abs(rewards[i] - rewards[j]) > epsilon
+        and (costs[i] - costs[j]) * (rewards[i] - rewards[j]) > 0
+        for i in range(len(rewards)) for j in range(i)
+    )
+    aligned = any(
+        abs(costs[i] - costs[j]) > epsilon and abs(rewards[i] - rewards[j]) > epsilon
+        and (costs[i] - costs[j]) * (rewards[i] - rewards[j]) < 0
+        for i in range(len(rewards)) for j in range(i)
+    )
+    return "audit_reward_efficiency_conflict" if conflict else (
+        "efficiency_rl" if aligned else "audit_reward_only_variance")
+
+def route_group(rewards, correctness_scores, epsilon=1e-6, *, efficiency_costs=None):
+    if efficiency_costs is not None and (
+        len(efficiency_costs) != len(rewards) or
+        any(not math.isfinite(float(c)) or c < 0 for c in efficiency_costs)
+    ):
+        raise ValueError("Need aligned finite nonnegative efficiency costs")
+
     if not math.isfinite(epsilon) or epsilon <= 0:
         raise ValueError("epsilon must be finite and positive")
     if len(rewards) < 2 or len(rewards) != len(correctness_scores):
@@ -22,7 +47,7 @@ def route_group(rewards, correctness_scores, epsilon=1e-6):
         for i in range(len(rewards)) for j in range(i)
     )
     if all(x == 1 for x in correctness_scores):
-        route = "efficiency_rl" if reward_std > epsilon else "mastered_replay"
+        route = efficiency_route(rewards, efficiency_costs, epsilon)
     elif quality_std > epsilon and reward_std > epsilon:
         route = "audit_reward_quality_conflict" if inversions else "rl_ready"
     elif quality_std > epsilon:
@@ -51,7 +76,9 @@ def groups_from_agent_traces(rows):
     result = []
     for (step, case_id), members in sorted(groups.items()):
         scores = []
+        costs = []
         for member in members:
+            costs.append(sum(len(t.get("info", {}).get("tool_calls", [])) for t in member["trace"]))
             finals = [
                 c
                 for t in member["trace"]
@@ -76,7 +103,8 @@ def groups_from_agent_traces(rows):
                 "source_id": case_id,
                 "step": step,
                 "split": "train",
-                **route_group([m["reward"] for m in members], scores),
+                **route_group([m["reward"] for m in members], scores, efficiency_costs=costs),
+                "efficiency_costs": costs,
             }
         )
     return result
