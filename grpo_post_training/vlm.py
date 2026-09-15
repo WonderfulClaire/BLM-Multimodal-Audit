@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import random
 from pathlib import Path
 import torch
@@ -41,6 +42,20 @@ def score_answer(text, truth):
     return {'reward': float(category and level), 'format_valid': prediction is not None,
             'category_correct': category, 'level_correct': level,
             'joint_correct': category and level, 'prediction': prediction}
+
+
+def review_failure(row, text, score, step, member):
+    if row.get('split') != 'train':
+        raise ValueError('Only training errors may enter the review queue')
+    if score['joint_correct']:
+        return None
+    return {'id': f"{row['id']}-step{step}-sample{member}", 'source_id': row['id'],
+            'group_id': row.get('group_id', row['id']), 'split': 'train', 'task_type': 'image',
+            'image': row['image'], 'image_sha256': row['image_sha256'],
+            'rule_version': row.get('rule_version'), 'error_type': 'low_reward',
+            'severity': 1-float(score['reward']), 'uncertainty': 0., 'cost': 1.,
+            'prediction': text, 'observation': {'image': row['image'], 'policy': row['prompt']},
+            'status': 'needs_independent_review'}
 
 
 def messages_for(row):
@@ -162,6 +177,8 @@ def main():
     initial = [p.detach().float().cpu().clone() for p in trainable]
     optim = torch.optim.AdamW(trainable, lr=a.lr)
     order = list(range(len(rows)));random.Random(a.seed).shuffle(order)
+    failures = 0
+    if a.mode == 'grpo': (a.output/'review_queue.jsonl').write_text('')
     for step in range(a.steps):
         row = rows[order[step % len(order)]]
         inputs = encode(processor, row, a.manifest, a.device)
@@ -179,6 +196,11 @@ def main():
                 actions, text = generate(model, processor, inputs, a.max_tokens, sample=True)
                 score = score_answer(text, row['ground_truth']);rewards.append(score['reward'])
                 episodes.append(actions)
+                review_row = {**row, 'image_sha256': metadata['image_sha256'][row['id']],
+                              'image': os.path.relpath((a.manifest.parent/row['image']).resolve(), a.output.resolve())}
+                failure = review_failure(review_row, text, score, step, member)
+                if failure is not None:
+                    record('review_queue.jsonl', failure);failures += 1
                 record('trajectories.jsonl', {'step': step, 'member': member, 'id': row['id'], 'split':'train',
                        'text':text, 'ground_truth': row['ground_truth'], 'response_tokens':actions.numel(), **score})
             reward = torch.tensor(rewards, device=a.device)
@@ -209,6 +231,6 @@ def main():
     model.save_pretrained(a.output/'adapter');processor.save_pretrained(a.output/'processor')
     torch.save(optim.state_dict(), a.output/'optimizer.pt')
     delta=sum(float((p.detach().float().cpu()-old).square().sum()) for p,old in zip(trainable,initial))**.5
-    (a.output/'summary.json').write_text(json.dumps({'parameter_delta_l2':delta,'steps':a.steps},indent=2))
+    (a.output/'summary.json').write_text(json.dumps({'parameter_delta_l2':delta,'steps':a.steps,'review_queue_count':failures},indent=2))
 
 if __name__ == '__main__': main()

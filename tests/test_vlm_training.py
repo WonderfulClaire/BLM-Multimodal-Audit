@@ -43,3 +43,17 @@ def test_model_messages_do_not_include_labels_or_ids():
     text=json.dumps(messages_for(row))
     assert 'answer-leak-id' not in text and 'secret-answer' not in text
     assert 'Follow the policy.' in text
+
+def test_vlm_review_queue_never_mines_heldout_or_auto_approves():
+    from grpo_post_training.vlm import review_failure
+    import pytest
+    row={'id':'x','split':'train','group_id':'scene','image':'x.png','image_sha256':'abc',
+         'prompt':'policy','rule_version':'v1'}
+    score={'reward':0.,'joint_correct':False}
+    failure=review_failure(row,'incorrect answer',score,0,1)
+    assert failure['status']=='needs_independent_review'
+    assert failure['image_sha256']=='abc' and failure['group_id']=='scene'
+    assert 'curation' not in failure and 'ground_truth' not in failure
+    assert review_failure(row,'correct',{'reward':1.,'joint_correct':True},0,1) is None
+    with pytest.raises(ValueError,match='training'):
+        review_failure({**row,'split':'test'},'bad',score,0,1)
