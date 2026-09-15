@@ -5,6 +5,8 @@ from statistics import pstdev
 
 
 def route_group(rewards, correctness_scores, epsilon=1e-6):
+    if not math.isfinite(epsilon) or epsilon <= 0:
+        raise ValueError("epsilon must be finite and positive")
     if len(rewards) < 2 or len(rewards) != len(correctness_scores):
         raise ValueError("Need aligned rollout groups")
     if any(not math.isfinite(float(x)) for x in [*rewards, *correctness_scores]):
@@ -13,10 +15,16 @@ def route_group(rewards, correctness_scores, epsilon=1e-6):
         raise ValueError("Correctness must be between 0 and 1")
     reward_std = pstdev(rewards)
     quality_std = pstdev(correctness_scores)
+    inversions = sum(
+        abs(correctness_scores[i] - correctness_scores[j]) > epsilon
+        and abs(rewards[i] - rewards[j]) > epsilon
+        and (correctness_scores[i] - correctness_scores[j]) * (rewards[i] - rewards[j]) < 0
+        for i in range(len(rewards)) for j in range(i)
+    )
     if all(x == 1 for x in correctness_scores):
         route = "efficiency_rl" if reward_std > epsilon else "mastered_replay"
     elif quality_std > epsilon and reward_std > epsilon:
-        route = "rl_ready"
+        route = "audit_reward_quality_conflict" if inversions else "rl_ready"
     elif quality_std > epsilon:
         route = "repair_reward_resolution"
     elif reward_std > epsilon:
@@ -29,6 +37,7 @@ def route_group(rewards, correctness_scores, epsilon=1e-6):
         "correctness_std": quality_std,
         "mean_correctness": sum(correctness_scores) / len(correctness_scores),
         "group_size": len(rewards),
+        "reward_quality_inversions": inversions,
     }
 
 

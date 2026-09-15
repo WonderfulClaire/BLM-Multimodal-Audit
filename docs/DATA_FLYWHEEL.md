@@ -60,6 +60,13 @@ python -m data_flywheel.rl_feedback /path/to/agent/trajectories.jsonl --output r
 
 `evaluation.py` 要求基线与新模型的样本 ID、标签和来源组配对一致，按来源组 bootstrap，报告总体差值、置信区间与分标签退化。奖励上涨本身不参与接受条件。这里的接受是“可进入人工审阅”，不会自动替换部署模型。
 
+`agent_evaluation.py` 把真实Agent预测接入同一门槛：独立案例文件提供标签和来源组；预测必须完整配对、不能改写标签；另检查单/多根因准确率及工具错误。训练集拒绝使用，开发集即使分数提高也不能通过版本验收。
+
+```bash
+python -m data_flywheel.agent_evaluation --cases frozen/test.jsonl \
+  --baseline baseline.jsonl --challenger challenger.jsonl --output gate.json
+```
+
 ```bash
 python -m scripts.run_flywheel_demo
 ```
@@ -67,5 +74,9 @@ python -m scripts.run_flywheel_demo
 该 demo 会接收 1 条正常增广、拒绝 1 条改名的评测图片、隔离 1 条标签修改后沿用旧审核的样本，并生成 1 条明确审核过的偏好对。数据版本含 4 条回放与 1 条新样本。这些是集成测试事实，不是业务质量收益。
 
 ## 待验证的研究问题
+
+分流另检查奖励与独立正确性的成对排序：若更差答案得分反而更高，进入 `audit_reward_quality_conflict`，先修奖励再考虑RL。该规则比较已验证的质量分，不用模型自报信心替代正确性。它是保守启发式规则；质量标签本身错误仍会误导它。
+
+对8组已有Agent真实轨迹重新审查，仍为3组可学习、3组仅辅助奖励变化、2组教师/SFT修复，没有新发现的排序倒置。配套[根因加权回训对照](https://github.com/WonderfulClaire/5G-Diagnostic-Agent/blob/main/reports/experiments/20260915-retention/REPORT.md)未解决旧能力退化，候选未采用，冻结测试保持封存。
 
 固定总样本数、教师预算、训练步数和模型，比较随机回流、仅按低奖励回流、按学习信号分流。报告新错误修复率、旧类别退化、每条有效样本的生成/审核成本，以及独立评测。若质量不变，只是奖励或样本数量上升，则不接受新版本。
