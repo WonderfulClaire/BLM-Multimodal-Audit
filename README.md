@@ -48,11 +48,21 @@ python -m grpo_post_training.train runs/fixtures/audit.jsonl --output runs/grpo 
 
 错例回流入口 `grpo_post_training.flywheel` 要求候选记录、独立审核决定及禁止混入训练的评测 ID 列表；输出仅包含通过审核、有教师/规则版本、无重复的训练样本。教师服务由使用方接入，审核通过不代表真实业务正确率提升。
 
+## 多卡图像训练
+
+```bash
+python -m torch.distributed.run --master_addr=127.0.0.1 --master_port=29618 --nproc_per_node=2 -m visual_pretrain.train_distributed runs/fixtures/train.jsonl --output runs/ddp-visual --backend nccl --steps 10 --verify-central
+```
+
+按图像切分，各卡图像数和区域数可以不等。图像与区域分别同步负例池，并按各自全局样本数归一化；区域对应的人工难负例留在本卡计算，再校正 DDP 平均权重。默认关闭 dropout 以便复核集中式梯度。只使用经 pipeline 处理的 manifest；入口核对图像内容哈希与审核来源标记，标记本身不是新的独立人工审核。输出目录必须不存在。
+
+`--verify-central` 在首步额外跑全量集中式参考，验证参数梯度，会增加内存和耗时。CPU 可使用 `--backend gloo`。它是正确性验证，不能据此声称吞吐或业务准确率提升。
+
 ## 实验范围
 
 当前可运行训练器使用从头初始化的小型双塔与结构化生成模型。GRPO 的三个输出 token 分别表示类别、等级、理由，适合核验采样、奖励、梯度和存盘链路；完整自然语言多模态模型训练仍需接入真实权重与训练后端。
 
-二维视觉 RoPE 已实现；完整多模态语言模型的时间/高度/宽度 MRoPE 不包含在该紧凑模型中。视频抽帧采用确定性启发式，不能保证短事件召回。视觉训练入口逐图编码动态分辨率；分布式同步和视频表征模块有独立测试，尚未接入统一的大规模多机训练入口。
+二维视觉 RoPE 已实现；完整多模态语言模型的时间/高度/宽度 MRoPE 不包含在该紧凑模型中。视频抽帧采用确定性启发式，不能保证短事件召回。视觉训练入口逐图编码动态分辨率；全局、区域和难负例三项损失已接入 `torchrun` 训练入口，并与集中式模型梯度核对；当前采用完整 manifest 批次，每个 rank 至少一张图，尚无大规模多机数据流与视频联合训练验证。
 
 查看 [验证记录](reports/validation.md) 与 [实验协议](docs/EXPERIMENT_PROTOCOL.md)。CPU 集成测试不代表业务准确率、GPU 吞吐或 Ascend 实验结果。原始业务数据、内部模型、个人简历均不包含在仓库中。
 

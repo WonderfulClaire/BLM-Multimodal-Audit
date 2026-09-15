@@ -1,0 +1,18 @@
+{
+  "seed": 42,
+  "steps": 3,
+  "backend": "gloo",
+  "world_size": 2,
+  "images_per_rank": [
+    2,
+    1
+  ],
+  "regions_per_rank": [
+    2,
+    1
+  ],
+  "manifest_sha256": "8329dfc9bae40abf3bbb1c0bc2fefbcde611c3445db77ea58b98d36dfe65352a",
+  "torch": "2.14.0",
+  "dropout_enabled": false,
+  "scope": "compact synthetic or user supplied manifest; full batch; no business accuracy claim"
+}

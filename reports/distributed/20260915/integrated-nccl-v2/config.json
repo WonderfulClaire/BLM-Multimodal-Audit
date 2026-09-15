@@ -1,0 +1,18 @@
+{
+  "seed": 42,
+  "steps": 10,
+  "backend": "nccl",
+  "world_size": 2,
+  "images_per_rank": [
+    2,
+    1
+  ],
+  "regions_per_rank": [
+    2,
+    1
+  ],
+  "manifest_sha256": "0e94302b985d033267024ca27085855706fb8ebe0edeb6f48fca99b98a3f843b",
+  "torch": "2.6.0+cu124",
+  "dropout_enabled": false,
+  "scope": "compact synthetic or user supplied manifest; full batch; no business accuracy claim"
+}

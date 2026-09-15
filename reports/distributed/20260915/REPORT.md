@@ -41,3 +41,14 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 python -m torch.distributed.run \
 CPU用`--backend gloo`。先确认所选设备空闲。输出只创建不覆盖；同一端口不能与其他任务冲突。Mac的自动hostname rendezvous曾解析失败，显式localhost启动成功。原生兼容对照使用的`torch.distributed.nn.functional`在本机2.14提示弃用，服务器2.6仍可用；本报告不据此承诺未来版本API兼容。
 
 前后源码SHA-256、Gloo结果、两轮NCCL结果均在本目录。下一步如研究系统收益，应固定全局batch/数据目标，加入动态batch倾斜、端到端step、显存、拓扑和固定质量评测。
+# 完整图像训练补充验证
+
+新增 `visual_pretrain.train_distributed`：动态分辨率图像和实际裁剪区域经过模型编码，全局与区域分别形成跨卡负例池，难负例按区域全局数量校正 DDP 平均权重。完整模型首步梯度与集中式原始 FGClipLoss 独立对照。
+
+- CPU/Gloo 两进程，3 张合成图按 2/1 切分：FP32 参数梯度最大误差 4.77e-7，完成 3 步。
+- GPU/NCCL 两卡，同一图像批次：最大误差 7.75e-7，完成 10 步；47 个参数张量均变化，47 份优化器状态，checkpoint 通过 weights_only 重载。
+- 独立三进程测试额外覆盖区域数 0/1/3 与全局无区域，核对编码器及温度参数梯度。
+
+原始记录位于 integrated-gloo、integrated-nccl、integrated-nccl-v2。首版保存的 TorchVersion 对象阻止默认安全加载；改为字符串后重新执行 NCCL 实验并验证加载，保留历史记录。源码哈希见 integrated-source.json。
+
+这证明了分布式训练目标和存盘链路的正确性。图像仅为 3 张程序绘制的颜色方块，训练 loss 下降不是业务能力提升。完整批次及逐图编码尚未优化数据吞吐，其耗时不可与纯通信微基准直接比较，首步还包含集中式参考计算。入口要求每个 rank 至少一张图；图像完全空 rank 仅在底层同步测试中覆盖。

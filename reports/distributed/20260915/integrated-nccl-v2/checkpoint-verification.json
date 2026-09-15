@@ -1,0 +1,6 @@
+{
+  "state_tensors": 47,
+  "changed_tensors": 47,
+  "optimizer_states": 47,
+  "weights_only_reload": true
+}
