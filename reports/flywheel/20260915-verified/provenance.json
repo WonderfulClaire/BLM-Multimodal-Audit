@@ -1,0 +1,13 @@
+{
+  "code_sha256": {
+    "data_flywheel/numeric_audit.py": "e19871cfe6541fbd7ba8b4a26e33d8e84da185253524f75944ca04412d95bb3f",
+    "scripts/run_agent_flywheel.py": "3627f0b383f691661f2ec109f4818d31d46f93a36e9061d7fbabb005ca255ed5",
+    "data_flywheel/rl_feedback.py": "fb61a600678c42743e958d14acf0a3ec5499cf4f2af11a313d29eb6d76bd493b"
+  },
+  "input_sha256": {
+    "train.jsonl": "12e0a10108b5a34f0691385af2a88d468ecfa4cb98f3b18d4c8e95c097ec40c5",
+    "compound_train.jsonl": "b975c6bed5ef84d060c496feaf99a5a72df073d3d65f2ecef6e3ea20714b28fa",
+    "trajectories.jsonl": "5832ce2e52738d108c8a777cdc15f76be672a2a2316ae8967490996064dfc717",
+    "eval12.jsonl": "b769963f13c1e444c3da3f402e3ed9b20e8ee2f559441b534d5590900f71b79e"
+  }
+}

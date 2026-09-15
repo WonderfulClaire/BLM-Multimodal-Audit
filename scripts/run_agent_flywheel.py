@@ -44,7 +44,16 @@ def validate_synthetic_case(case):
     return causes
 
 
-def prepare(inputs, output):
+def prepare(inputs, output, validator_name="template"):
+    if validator_name == "measured":
+        from data_flywheel.numeric_audit import validate_measured_case, RULE_VERSION
+        validate = validate_measured_case
+        rule_version = RULE_VERSION
+    elif validator_name == "template":
+        validate = validate_synthetic_case
+        rule_version = "synthetic-rca-v1"
+    else:
+        raise ValueError("Unknown validator")
     inputs = Path(inputs)
     output = Path(output)
     output.mkdir(parents=True, exist_ok=False)
@@ -68,7 +77,7 @@ def prepare(inputs, output):
     checks = []
     for row in read_rows(inputs / "compound_train.jsonl"):
         route = route_by_case.get(row["id"])
-        if not route or route["route"] == "mastered_replay":
+        if not route or route["route"] not in {"rl_ready", "teacher_or_sft_repair"}:
             continue
         if row["split"] != "train":
             raise ValueError("Refuse evaluation-source augmentation")
@@ -91,10 +100,13 @@ def prepare(inputs, output):
             "id": "reviewed-" + row["id"],
             "source_id": row["id"],
             "teacher_model": "synthetic-case-composer-v1",
-            "rule_version": "synthetic-rca-v1",
+            "rule_version": rule_version,
             "error_type": "partial_diagnosis",
         }
-        valid = validate_synthetic_case(c["case"]) == sorted(c["ground_truth"])
+        try:
+            valid = validate(c["case"]) == sorted(c["ground_truth"])
+        except (ValueError, KeyError, TypeError):
+            valid = False
         digest = candidate_digest(c)
         candidates.append(c)
         reviews.append(
@@ -111,14 +123,14 @@ def prepare(inputs, output):
                 "candidate_id": c["id"],
                 "candidate_digest": digest,
                 "passed": valid,
-                "validator": "synthetic-template-rules",
+                "validator": rule_version,
             }
         )
     config = {
         "budget": 8,
         "max_new_fraction": 0.25,
         "rules": {
-            "version": "synthetic-rca-v1",
+            "version": rule_version,
             "text": "Use only observed synthetic measurements. Include every supported cause.",
         },
     }
@@ -142,8 +154,9 @@ def main():
     p = argparse.ArgumentParser()
     p.add_argument("inputs", type=Path)
     p.add_argument("--output", type=Path, required=True)
+    p.add_argument("--validator", choices=["template", "measured"], default="template")
     a = p.parse_args()
-    config = prepare(a.inputs, a.output / "inputs")
+    config = prepare(a.inputs, a.output / "inputs", validator_name=a.validator)
     print(json.dumps(run_round(config, a.output / "round-001"), indent=2))
 
 

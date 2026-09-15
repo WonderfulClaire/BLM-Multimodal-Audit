@@ -1,0 +1,7 @@
+{
+  "rows_checked": 512,
+  "all_observation_labels_match": true,
+  "validator": "numeric-fixture-v1",
+  "dataset_sha256": "12e0a10108b5a34f0691385af2a88d468ecfa4cb98f3b18d4c8e95c097ec40c5",
+  "scope": "Synthetic observation parser; no ground truth or audit_measurements read by validator"
+}

@@ -82,3 +82,8 @@ python -m scripts.run_flywheel_demo
 对8组已有Agent真实轨迹重新审查，仍为3组可学习、3组仅辅助奖励变化、2组教师/SFT修复，没有新发现的排序倒置。配套[根因加权回训对照](https://github.com/WonderfulClaire/5G-Diagnostic-Agent/blob/main/reports/experiments/20260915-retention/REPORT.md)未解决旧能力退化，候选未采用，冻结测试保持封存。
 
 固定总样本数、教师预算、训练步数和模型，比较随机回流、仅按低奖励回流、按学习信号分流。报告新错误修复率、旧类别退化、每条有效样本的生成/审核成本，以及独立评测。若质量不变，只是奖励或样本数量上升，则不接受新版本。
+# 数值课程接入补充
+
+`scripts.run_agent_flywheel --validator measured` 接受 numeric-fixture-v1 观测。独立解析器只读实际观测数字，不信任教师标签或附带的 audit_measurements；未知格式、缺失或冲突记录不能直接通过。规则适用范围仅为该合成语法。
+
+[本次真实轨迹回流](../reports/flywheel/20260915-verified/REPORT.md)：8组中6组回放、2组可学习；2条候选审核通过后均被内容去重挡住，新增0条，不重复启动训练。该决策体现飞轮对数据价值的筛选，不是模型能力提升结果。

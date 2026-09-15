@@ -1,0 +1,2 @@
+{"id": "reviewed-f69b540b3bb1c0428326", "status": "accept", "reason": "passed", "candidate_digest": "030d6d042d566a0c5ff42137c1ae5852b78d566b515c08b94935013677f454cd", "reviewer": "synthetic-rule-validator-v1", "rule_version": "numeric-fixture-v1"}
+{"id": "reviewed-919c644dd969e0f46b18", "status": "accept", "reason": "passed", "candidate_digest": "7a33e3fb57c57fc861a2861fe5cc089d6b8ba860e12d2ae80d66edeeacfd0d60", "reviewer": "synthetic-rule-validator-v1", "rule_version": "numeric-fixture-v1"}
