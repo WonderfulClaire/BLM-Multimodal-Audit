@@ -1,0 +1,124 @@
+{
+  "runs": [
+    {
+      "name": "BLM/SFT_24",
+      "training": "runs/sft/training.jsonl",
+      "config": "runs/sft/config.json",
+      "evaluations": [
+        {
+          "path": "runs/sft-train/metrics.json",
+          "split": "train",
+          "step": 24
+        },
+        {
+          "path": "runs/sft-dev/metrics.json",
+          "split": "dev",
+          "step": 24
+        },
+        {
+          "path": "runs/sft-test/metrics.json",
+          "split": "test",
+          "step": 24
+        },
+        {
+          "path": "runs/sft-confirmation/metrics.json",
+          "split": "confirmation",
+          "step": 24
+        }
+      ],
+      "predictions": [
+        {
+          "path": "runs/sft-train/predictions.jsonl",
+          "split": "train",
+          "step": 24
+        },
+        {
+          "path": "runs/sft-dev/predictions.jsonl",
+          "split": "dev",
+          "step": 24
+        },
+        {
+          "path": "runs/sft-test/predictions.jsonl",
+          "split": "test",
+          "step": 24
+        },
+        {
+          "path": "runs/sft-confirmation/predictions.jsonl",
+          "split": "confirmation",
+          "step": 24
+        }
+      ],
+      "note": "真实模型的合成图形规则实验；日志回放。SFT96是原始失败后的一次覆盖对照，GRPO使用SFT24初始化。"
+    },
+    {
+      "name": "BLM/SFT_96",
+      "training": "runs/sft96/training.jsonl",
+      "config": "runs/sft96/config.json",
+      "evaluations": [
+        {
+          "path": "runs/sft96-train/metrics.json",
+          "split": "train",
+          "step": 96
+        },
+        {
+          "path": "runs/sft96-dev/metrics.json",
+          "split": "dev",
+          "step": 96
+        },
+        {
+          "path": "runs/sft96-confirmation/metrics.json",
+          "split": "confirmation",
+          "step": 96
+        }
+      ],
+      "predictions": [
+        {
+          "path": "runs/sft96-train/predictions.jsonl",
+          "split": "train",
+          "step": 96
+        },
+        {
+          "path": "runs/sft96-dev/predictions.jsonl",
+          "split": "dev",
+          "step": 96
+        },
+        {
+          "path": "runs/sft96-confirmation/predictions.jsonl",
+          "split": "confirmation",
+          "step": 96
+        }
+      ],
+      "note": "真实模型的合成图形规则实验；日志回放。SFT96是原始失败后的一次覆盖对照，GRPO使用SFT24初始化。"
+    },
+    {
+      "name": "BLM/GRPO_after_SFT24",
+      "training": "runs/grpo/training.jsonl",
+      "config": "runs/grpo/config.json",
+      "evaluations": [
+        {
+          "path": "runs/grpo-dev/metrics.json",
+          "split": "dev",
+          "step": 6
+        },
+        {
+          "path": "runs/grpo-test/metrics.json",
+          "split": "test",
+          "step": 6
+        }
+      ],
+      "predictions": [
+        {
+          "path": "runs/grpo-dev/predictions.jsonl",
+          "split": "dev",
+          "step": 6
+        },
+        {
+          "path": "runs/grpo-test/predictions.jsonl",
+          "split": "test",
+          "step": 6
+        }
+      ],
+      "note": "真实模型的合成图形规则实验；日志回放。SFT96是原始失败后的一次覆盖对照，GRPO使用SFT24初始化。"
+    }
+  ]
+}

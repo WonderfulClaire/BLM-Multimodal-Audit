@@ -84,3 +84,14 @@ python -m grpo_post_training.vlm grpo runs/vlm-fixture/train.jsonl \
 历史实习没负责完整RL部署时，先讲清参与范围，再切换到这次实际跑过的复现。看过界面只是开始，能把曲线异常关联到代码、样本和下一步实验，才是调参经验。
 
 来源：[本次VLM原始记录](../reports/vlm/20260915/REPORT.md)、训练源代码、[TensorBoard官方入门](https://www.tensorflow.org/tensorboard/get_started)。
+
+
+## 从仓库证据重建界面
+
+```bash
+pip install -r requirements-monitoring.txt
+python -m scripts.export_tensorboard reports/vlm/20260915/tensorboard-spec.json --output runs/tensorboard-review
+tensorboard --logdir runs/tensorboard-review --host 127.0.0.1 --port 6006
+```
+
+打开http://127.0.0.1:6006。输出目录必须不存在；这是可重建的日志回放。本机带读还导入了另一个Agent仓库的日志；公开spec仅引用本仓库的BLM证据，无私人绝对路径。
