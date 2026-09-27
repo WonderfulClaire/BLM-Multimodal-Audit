@@ -71,3 +71,8 @@ python -m torch.distributed.run --master_addr=127.0.0.1 --master_port=29618 --np
 ## 方法与许可
 
 项目使用通用的 CLIP、GRPO、窗口注意力与旋转位置编码思想，并为审核任务实现数据检查、训练链路和测试。方法名称不表示原创算法声明。代码采用 MIT；可选预训练模型和第三方后端遵循各自许可，尤其请按 Ultralytics 的许可选择检测部署方式。
+
+
+## Reward quality audit
+
+GRPO reward is treated as an optimization signal, not a ground-truth metric. The repository now includes an independent pairwise reward-alignment audit that reports ranking inversions and top-reward failures against a separate evaluator. See [docs/REWARD_AUDIT.md](docs/REWARD_AUDIT.md).
