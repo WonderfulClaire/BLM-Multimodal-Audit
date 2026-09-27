@@ -9,3 +9,6 @@
 5. 至少三个种子，开发集选模型，测试集一次汇报；保存配置、环境、checkpoint、原始预测和逐例评分。
 
 发布中的 CPU 测试解决正确性问题。真实预训练权重、经授权的业务数据、GPU 登录与完整训练后端就绪后，才能执行能力对比并决定继续、修改或停止。
+
+
+6. Reward quality is audited separately from training reward. For each rollout group, compare reward ordering with an independent evaluation score and report reward-quality inversion rate plus top-reward failure rate. A higher GRPO reward without stable/improved independent evaluation is not evidence of capability improvement. See [Reward Audit](REWARD_AUDIT.md).
