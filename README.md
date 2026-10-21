@@ -1,24 +1,26 @@
-# BLM Multimodal Audit
+<div align="center">
 
-面向图像与视频审核的多模态训练项目：从细粒度数据生产、视觉表征学习，到结构化审核输出的 GRPO 后训练与错例回流。
+<h1>BLM Multimodal Audit</h1>
 
-新增[四卡NCCL实验与反向通信优化](reports/distributed/20260915/REPORT.md)：真实DDP参数梯度对齐集中式目标，覆盖不等长batch与空rank；保留ReduceScatter、AllReduce及原生AllGather逐次计时。通信轮数、微基准耗时和业务收益分别报告。
+<p><strong>从细粒度数据生产、视觉表征学习，到结构化审核输出的 GRPO 后训练与错例回流。</strong></p>
 
-## 核心模块
+<p>Image &amp; Video · Visual Pretraining · GRPO · Data Flywheel</p>
 
-| 目标 | 实现 | 验证 |
-|---|---|---|
-| 保留细节、控制视觉 token 预算 | Smart Resize、真实窗口划分、全局注意力层、Q/K 二维 RoPE | 尺寸约束、RoPE 范数及前向调用测试 |
-| 扩大对比学习负例池 | 不等长 batch 双向 ring 特征同步、可微反向聚合、双向 CLIP | 3/4 进程及空 rank，数值与集中式梯度对齐 |
-| 学会区分局部细节 | Caption → 表达式 → 检测框 → 经审核的难负例；全局/区域/难负例三项损失 | 真实渲染图像训练、非法框与假负例拒绝测试 |
-| 在视频预算内保留时序信息 | 覆盖与变化量抽帧、分段 mask、局部及全局帧注意力、binpack | 帧数预算、跨视频及 padding 隔离测试 |
-| 用反馈改善审核策略 | 自回归采样、可解释奖励、GRPO、冻结参考策略、错例队列与教师候选审核入口 | 奖励逐条重算、参数更新及 checkpoint 测试 |
+<p>
+  <a href="#快速运行">Quickstart</a> &nbsp;·&nbsp;
+  <a href="#核心能力">Methods</a> &nbsp;·&nbsp;
+  <a href="#实验与验证">Experiments</a> &nbsp;·&nbsp;
+  <a href="docs/DATA_FLYWHEEL.md">Data Flywheel</a> &nbsp;·&nbsp;
+  <a href="#方法与许可">License</a>
+</p>
 
-## 重点：数据飞轮与学习信号
+<img src="docs/assets/project-overview.svg" alt="BLM workflow: reviewed data, visual representation, structured generation and GRPO, independent evaluation, and error feedback" width="100%">
 
-飞轮已扩展为独立的 `data_flywheel/` 模块：错误预算采样、审核理由偏好对、针对性教师请求、内容绑定审核、跨模态防泄漏、旧样本回放与独立评测门槛。它还能读取 5G Agent 的真实 GRPO 轨迹，将已掌握、稳定做错、有用探索和只有奖励变化的组分别处理。
+</div>
 
-[完整数据飞轮设计与运行方式](docs/DATA_FLYWHEEL.md)
+| ① 数据生产 | ② 视觉表征 | ③ 策略学习 |
+| :--- | :--- | :--- |
+| 细粒度标注、区域定位、经审核的难负例 | 动态分辨率、窗口注意力、多卡对比学习 | 结构化生成、GRPO、独立评测与错例回流 |
 
 ## 快速运行
 
@@ -34,6 +36,24 @@ python -m scripts.run_grpo_demo
 ```
 
 演示图片由程序绘制，框和属性来自渲染过程；红色标为“风险”只是人工定义的集成测试规则。输出保存在 `runs/`，包含各损失、生成轨迹、奖励分解、错例和模型权重。
+
+## 核心能力
+
+面向图像与视频审核，串联数据、训练、评测与回流；各模块提供独立的验证入口。
+
+| 目标 | 实现 | 验证 |
+|---|---|---|
+| 保留细节、控制视觉 token 预算 | Smart Resize、真实窗口划分、全局注意力层、Q/K 二维 RoPE | 尺寸约束、RoPE 范数及前向调用测试 |
+| 扩大对比学习负例池 | 不等长 batch 双向 ring 特征同步、可微反向聚合、双向 CLIP | 3/4 进程及空 rank，数值与集中式梯度对齐 |
+| 学会区分局部细节 | Caption → 表达式 → 检测框 → 经审核的难负例；全局/区域/难负例三项损失 | 真实渲染图像训练、非法框与假负例拒绝测试 |
+| 在视频预算内保留时序信息 | 覆盖与变化量抽帧、分段 mask、局部及全局帧注意力、binpack | 帧数预算、跨视频及 padding 隔离测试 |
+| 用反馈改善审核策略 | 自回归采样、可解释奖励、GRPO、冻结参考策略、错例队列与教师候选审核入口 | 奖励逐条重算、参数更新及 checkpoint 测试 |
+
+### 数据飞轮与学习信号
+
+飞轮已扩展为独立的 `data_flywheel/` 模块：错误预算采样、审核理由偏好对、针对性教师请求、内容绑定审核、跨模态防泄漏、旧样本回放与独立评测门槛。它还能读取 5G Agent 的真实 GRPO 轨迹，将已掌握、稳定做错、有用探索和只有奖励变化的组分别处理。
+
+[完整数据飞轮设计与运行方式](docs/DATA_FLYWHEEL.md)
 
 ## 数据生产与训练
 
@@ -58,7 +78,16 @@ python -m torch.distributed.run --master_addr=127.0.0.1 --master_port=29618 --np
 
 `--verify-central` 在首步额外跑全量集中式参考，验证参数梯度，会增加内存和耗时。CPU 可使用 `--backend gloo`。它是正确性验证，不能据此声称吞吐或业务准确率提升。
 
-## 实验范围
+## 实验与验证
+
+| 阅读入口 | 内容 |
+| :--- | :--- |
+| [真实 VLM 实验](reports/vlm/20260915/REPORT.md) | GPU 训练、重载评测、SFT / GRPO 对照与新布局确认 |
+| [四卡 NCCL 实验](reports/distributed/20260915/REPORT.md) | 不等长 batch、空 rank、集中式梯度对齐与逐次通信计时 |
+| [验证记录](reports/validation.md) · [实验协议](docs/EXPERIMENT_PROTOCOL.md) | 验证范围、实验条件与复核方式 |
+| [Reward quality audit](docs/REWARD_AUDIT.md) | 独立评估器下的奖励排序反转与高奖励失败 |
+
+### 多模态训练
 
 训练器同时提供紧凑双塔/三语义token测试入口，以及真实Qwen2.5-VL图片条件生成、LoRA SFT/GRPO入口。真实VLM已完成GPU训练和重载评测；[实验记录](reports/vlm/20260915/REPORT.md)保留24步SFT及GRPO全部判正常的失败、96步训练覆盖对照和新布局确认。简单合成规则的改善不代表真实业务审核效果。
 
@@ -66,13 +95,16 @@ python -m torch.distributed.run --master_addr=127.0.0.1 --master_port=29618 --np
 
 二维视觉 RoPE 已实现；完整多模态语言模型的时间/高度/宽度 MRoPE 不包含在该紧凑模型中。视频抽帧采用确定性启发式，不能保证短事件召回。视觉训练入口逐图编码动态分辨率；全局、区域和难负例三项损失已接入 `torchrun` 训练入口，并与集中式模型梯度核对；当前采用完整 manifest 批次，每个 rank 至少一张图，尚无大规模多机数据流与视频联合训练验证。
 
+### 分布式训练与通信
+
+[四卡 NCCL 实验与反向通信优化](reports/distributed/20260915/REPORT.md)：真实 DDP 参数梯度对齐集中式目标，覆盖不等长 batch 与空 rank；保留 ReduceScatter、AllReduce 及原生 AllGather 逐次计时。通信轮数、微基准耗时和业务收益分别报告。
+
+### Reward quality audit
+
+GRPO reward is treated as an optimization signal, not a ground-truth metric. The repository includes an independent pairwise reward-alignment audit that reports ranking inversions and top-reward failures against a separate evaluator. See [docs/REWARD_AUDIT.md](docs/REWARD_AUDIT.md).
+
 查看 [验证记录](reports/validation.md) 与 [实验协议](docs/EXPERIMENT_PROTOCOL.md)。CPU 集成测试不代表业务准确率、GPU 吞吐或 Ascend 实验结果。原始业务数据、内部模型、个人简历均不包含在仓库中。
 
 ## 方法与许可
 
 项目使用通用的 CLIP、GRPO、窗口注意力与旋转位置编码思想，并为审核任务实现数据检查、训练链路和测试。方法名称不表示原创算法声明。代码采用 MIT；可选预训练模型和第三方后端遵循各自许可，尤其请按 Ultralytics 的许可选择检测部署方式。
-
-
-## Reward quality audit
-
-GRPO reward is treated as an optimization signal, not a ground-truth metric. The repository now includes an independent pairwise reward-alignment audit that reports ranking inversions and top-reward failures against a separate evaluator. See [docs/REWARD_AUDIT.md](docs/REWARD_AUDIT.md).
