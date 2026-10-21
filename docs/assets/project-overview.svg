@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="664" viewBox="0 0 1440 664" role="img" aria-labelledby="title desc">
+  <title id="title">BLM Multimodal Audit</title>
+  <desc id="desc">A multimodal training workflow: reviewed data, visual representation, structured generation and GRPO, independent evaluation, and error feedback. Reviewed feedback returns to the data pipeline.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0C172B"/>
+      <stop offset="1" stop-color="#101C32"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#61E2D7"/>
+      <stop offset="1" stop-color="#AE9DF5"/>
+    </linearGradient>
+    <radialGradient id="glow">
+      <stop offset="0" stop-color="#7562D2" stop-opacity="0.13"/>
+      <stop offset="1" stop-color="#7562D2" stop-opacity="0"/>
+    </radialGradient>
+    <marker id="arrow" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1 1 L7 4.5 L1 8" fill="none" stroke="#8096B4" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="feedback" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1 1 L8 5 L1 9" fill="none" stroke="#86A6C3" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+
+  <rect width="1440" height="664" rx="24" fill="url(#bg)"/>
+  <ellipse cx="1220" cy="90" rx="450" ry="300" fill="url(#glow)"/>
+  <path d="M56 224 H1384" stroke="#27354C" stroke-width="1"/>
+  <rect x="56" y="46" width="36" height="4" rx="2" fill="#61E2D7"/>
+
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif">
+    <text x="108" y="55" fill="#87A0BD" font-size="19" font-weight="600" letter-spacing="2.4">BLM MULTIMODAL AUDIT</text>
+    <text x="56" y="125" fill="#F3F6FB" font-size="48" font-weight="700" letter-spacing="-1.5">Learn from detail.</text>
+    <text x="56" y="183" fill="#F3F6FB" font-size="48" font-weight="700" letter-spacing="-1.5">Improve with feedback.</text>
+
+    <rect x="1114" y="44" width="270" height="42" rx="21" fill="#18283E" stroke="#32435C"/>
+    <circle cx="1140" cy="65" r="4" fill="#61E2D7"/>
+    <text x="1161" y="72" fill="#C4D3E4" font-size="18" font-weight="600" letter-spacing="0.7">IMAGE + VIDEO</text>
+
+    <g fill="none" stroke="#8096B4" stroke-width="2" marker-end="url(#arrow)">
+      <path d="M297 381 H321"/>
+      <path d="M571 381 H595"/>
+      <path d="M845 381 H869"/>
+      <path d="M1119 381 H1143"/>
+    </g>
+
+    <g>
+      <rect x="56" y="258" width="232" height="258" rx="18" fill="#14263A" stroke="#335668"/>
+      <path d="M76 259 H268" stroke="#61E2D7" stroke-width="2" opacity="0.85"/>
+      <text x="80" y="299" fill="#61E2D7" font-size="20" font-weight="600">01</text>
+      <g transform="translate(224 280)" fill="none" stroke="#61E2D7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="0" y="0" width="34" height="28" rx="5"/>
+        <circle cx="10" cy="9" r="2.5"/>
+        <path d="M5 23 L15 14 L21 19 L27 12 L30 16"/>
+      </g>
+      <text x="80" y="357" fill="#F3F6FB" font-size="25" font-weight="650">Reviewed</text>
+      <text x="80" y="389" fill="#F3F6FB" font-size="25" font-weight="650">data</text>
+      <text x="80" y="453" fill="#A8BCD0" font-size="19">Caption · Region</text>
+      <text x="80" y="482" fill="#A8BCD0" font-size="19">Checked negatives</text>
+    </g>
+
+    <g>
+      <rect x="330" y="258" width="232" height="258" rx="18" fill="#152439" stroke="#34485F"/>
+      <text x="354" y="299" fill="#79CCDF" font-size="20" font-weight="600">02</text>
+      <g transform="translate(498 280)" fill="none" stroke="#79CCDF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="0" y="0" width="13" height="12" rx="2"/>
+        <rect x="20" y="0" width="13" height="12" rx="2"/>
+        <rect x="0" y="19" width="13" height="12" rx="2"/>
+        <rect x="20" y="19" width="13" height="12" rx="2"/>
+      </g>
+      <text x="354" y="357" fill="#F3F6FB" font-size="25" font-weight="650">Visual</text>
+      <text x="354" y="389" fill="#F3F6FB" font-size="25" font-weight="650">representation</text>
+      <text x="354" y="453" fill="#A8BCD0" font-size="19">Dynamic resolution</text>
+      <text x="354" y="482" fill="#A8BCD0" font-size="19">Contrastive learning</text>
+    </g>
+
+    <g>
+      <rect x="604" y="258" width="232" height="258" rx="18" fill="#1D2440" stroke="#55547C"/>
+      <path d="M624 259 H816" stroke="#AE9DF5" stroke-width="2" opacity="0.85"/>
+      <text x="628" y="299" fill="#AE9DF5" font-size="20" font-weight="600">03</text>
+      <g transform="translate(772 280)" fill="none" stroke="#AE9DF5" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M7 1 L1 1 L1 30 L7 30 M26 1 L32 1 L32 30 L26 30"/>
+        <path d="M11 9 H23 M11 16 H23 M11 23 H19"/>
+      </g>
+      <text x="628" y="357" fill="#F3F6FB" font-size="25" font-weight="650">Structured</text>
+      <text x="628" y="389" fill="#F3F6FB" font-size="25" font-weight="650">generation</text>
+      <text x="628" y="453" fill="#B8BDD6" font-size="19">Audit output</text>
+      <text x="628" y="482" fill="#B8BDD6" font-size="19">GRPO post-training</text>
+    </g>
+
+    <g>
+      <rect x="878" y="258" width="232" height="258" rx="18" fill="#19243B" stroke="#34485F"/>
+      <text x="902" y="299" fill="#A3ADE9" font-size="20" font-weight="600">04</text>
+      <g transform="translate(1046 280)" fill="none" stroke="#A3ADE9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 0 L30 6 V16 Q30 25 16 32 Q2 25 2 16 V6 Z"/>
+        <path d="M9 15 L14 20 L24 10"/>
+      </g>
+      <text x="902" y="357" fill="#F3F6FB" font-size="25" font-weight="650">Independent</text>
+      <text x="902" y="389" fill="#F3F6FB" font-size="25" font-weight="650">evaluation</text>
+      <text x="902" y="453" fill="#A8BCD0" font-size="19">Held-out IDs</text>
+      <text x="902" y="482" fill="#A8BCD0" font-size="19">Reward alignment</text>
+    </g>
+
+    <g>
+      <rect x="1152" y="258" width="232" height="258" rx="18" fill="#14263A" stroke="#335668"/>
+      <text x="1176" y="299" fill="#73D5CE" font-size="20" font-weight="600">05</text>
+      <g transform="translate(1320 280)" fill="none" stroke="#73D5CE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M28 10 A13 13 0 1 0 27 25"/>
+        <path d="M20 10 H29 V1"/>
+        <path d="M16 10 V18 L21 21"/>
+      </g>
+      <text x="1176" y="357" fill="#F3F6FB" font-size="25" font-weight="650">Error</text>
+      <text x="1176" y="389" fill="#F3F6FB" font-size="25" font-weight="650">feedback</text>
+      <text x="1176" y="453" fill="#A8BCD0" font-size="19">Reviewed candidates</text>
+      <text x="1176" y="482" fill="#A8BCD0" font-size="19">Replay + error budget</text>
+    </g>
+
+    <path d="M1268 526 V550 Q1268 570 1248 570 H192 Q172 570 172 550 V526" fill="none" stroke="#86A6C3" stroke-width="1.8" marker-end="url(#feedback)"/>
+    <text x="720" y="613" text-anchor="middle" fill="#91A8C1" font-size="18" font-weight="500" letter-spacing="2.5">REVIEW · FILTER · REPLAY</text>
+    <rect x="56" y="640" width="1328" height="2" rx="1" fill="url(#accent)" opacity="0.6"/>
+  </g>
+</svg>
